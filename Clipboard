@@ -1,0 +1,856 @@
+[
+    {
+        "id": "4248e3f4.dabacc",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "524b6513.937cfc",
+        "type": "chatbot-telegram-node",
+        "z": "",
+        "botname": "Hackatelegrambot",
+        "usernames": "",
+        "polling": "1000",
+        "log": ""
+    },
+    {
+        "id": "81ab9d21.07e28",
+        "type": "chatbot-slack-node",
+        "z": "",
+        "botname": "hackaslackbot",
+        "usernames": ""
+    },
+    {
+        "id": "f58d9e.41f1226",
+        "type": "chatbot-telegram-receive",
+        "z": "4248e3f4.dabacc",
+        "bot": "524b6513.937cfc",
+        "x": 115,
+        "y": 56,
+        "wires": [
+            [
+                "59ff0d04.203eec",
+                "e4eb42.c143acc"
+            ]
+        ]
+    },
+    {
+        "id": "490b7f98.cc85f",
+        "type": "chatbot-telegram-send",
+        "z": "4248e3f4.dabacc",
+        "bot": "524b6513.937cfc",
+        "track": true,
+        "parseMode": "",
+        "outputs": 1,
+        "x": 1044,
+        "y": 65,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "59ff0d04.203eec",
+        "type": "function",
+        "z": "4248e3f4.dabacc",
+        "name": "Mando el texto a identificar",
+        "func": "msg.chatId = msg.payload.chatId;\nmsg.payload = msg.payload.content;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 374,
+        "y": 131,
+        "wires": [
+            [
+                "b0ba226e.23f998"
+            ]
+        ]
+    },
+    {
+        "id": "57bc6507.6519e4",
+        "type": "function",
+        "z": "4248e3f4.dabacc",
+        "name": "Devuelvo el texto en español a la persona",
+        "func": "msg.payload = {\n chatId : msg.chatId,\n type : \"message\",\n content : msg.payload\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 730,
+        "y": 252,
+        "wires": [
+            [
+                "490b7f98.cc85f",
+                "bd44cdcd.45891"
+            ]
+        ]
+    },
+    {
+        "id": "7e7e4c89.29c064",
+        "type": "chatbot-message",
+        "z": "4248e3f4.dabacc",
+        "name": "mensaje",
+        "message": [
+            {
+                "message": "Bienvenid@, soy tu traductora particular.\nTan solo escribe el texto a traducir.\nY no te olvides de votar en el concurso por Marta Rodenas. Muchas gracias"
+            }
+        ],
+        "answer": false,
+        "track": false,
+        "x": 538,
+        "y": 55,
+        "wires": [
+            [
+                "490b7f98.cc85f"
+            ]
+        ]
+    },
+    {
+        "id": "e4eb42.c143acc",
+        "type": "chatbot-command",
+        "z": "4248e3f4.dabacc",
+        "name": "",
+        "command": "/start",
+        "x": 376,
+        "y": 56,
+        "wires": [
+            [
+                "7e7e4c89.29c064"
+            ]
+        ]
+    },
+    {
+        "id": "b0ba226e.23f998",
+        "type": "watson-language-translator-identify",
+        "z": "4248e3f4.dabacc",
+        "name": "Identifico el idioma",
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 643,
+        "y": 131,
+        "wires": [
+            [
+                "fa2b4dee.4d2648"
+            ]
+        ]
+    },
+    {
+        "id": "fa2b4dee.4d2648",
+        "type": "function",
+        "z": "4248e3f4.dabacc",
+        "name": "Mando el texto con la lengua identificada",
+        "func": "var lang = msg.languages.reduce(function(a, b)\n{return a.confidence > b.confidence ? a : b;});\n\nmsg.srcLang = lang.language;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 165,
+        "y": 426,
+        "wires": [
+            [
+                "c880ae98.506088",
+                "554e292.23f4a58",
+                "d5c8968a.0540b",
+                "e5d47e80.83f038",
+                "cc5140ec.cc499",
+                "1040e6d1.172c49",
+                "3312bd40.8c5e0a",
+                "18114876.5fd08",
+                "2c97cb3c.1db434",
+                "ea2ca38c.ac6e28",
+                "300026d5.71946a"
+            ]
+        ]
+    },
+    {
+        "id": "20dacb97.edb39c",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "aleman",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "de",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "de",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 708,
+        "y": 391,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "2d96f7f3.311718",
+        "type": "chatbot-slack-receive",
+        "z": "4248e3f4.dabacc",
+        "bot": "81ab9d21.07e28",
+        "x": 111,
+        "y": 178,
+        "wires": [
+            [
+                "59ff0d04.203eec"
+            ]
+        ]
+    },
+    {
+        "id": "bd44cdcd.45891",
+        "type": "chatbot-slack-send",
+        "z": "4248e3f4.dabacc",
+        "bot": "81ab9d21.07e28",
+        "x": 1035,
+        "y": 268,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8ce9e9aa.139a6",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "japones",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "ja",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "ja",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 709,
+        "y": 441,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "ef048b2.5555578",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "frances",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "fr",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "fr",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 710,
+        "y": 562,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "b5fdd01b.60e59",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "italiano",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "it",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "it",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 724,
+        "y": 739,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "b0ddad61.70fb4",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "arabe",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "ar",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "ar",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 700,
+        "y": 495,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "cded54d5.164788",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "portugues",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "pt",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "pt",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 715,
+        "y": 625,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "4b9e0b73.88d1c4",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "holandes",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "en",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "nl",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 720,
+        "y": 684,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "e9c27b41.3ab05",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "coreano",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "ko",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "ko",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 709,
+        "y": 798,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "8fece0f8.e8544",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "chino",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "zh",
+        "destlang": "en",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "zh",
+        "destlanghidden": "en",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 689,
+        "y": 860,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    },
+    {
+        "id": "c880ae98.506088",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es aleman",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "de",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "de",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 493,
+        "y": 397,
+        "wires": [
+            [
+                "20dacb97.edb39c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "554e292.23f4a58",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es japones",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ja",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "ja",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 491,
+        "y": 447,
+        "wires": [
+            [
+                "8ce9e9aa.139a6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d5c8968a.0540b",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es frances",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "fr",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "fr",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 502,
+        "y": 567,
+        "wires": [
+            [
+                "ef048b2.5555578"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e5d47e80.83f038",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es italiano",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "it",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "it",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 483,
+        "y": 746,
+        "wires": [
+            [
+                "b5fdd01b.60e59"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cc5140ec.cc499",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es arabe",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ar",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "ar",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 490,
+        "y": 500,
+        "wires": [
+            [
+                "b0ddad61.70fb4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1040e6d1.172c49",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es portugues",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "pt",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "pt",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 489,
+        "y": 630,
+        "wires": [
+            [
+                "cded54d5.164788"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3312bd40.8c5e0a",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es holandes",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "nl",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "nl",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 483,
+        "y": 692,
+        "wires": [
+            [
+                "4b9e0b73.88d1c4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8122c624.b4ce6",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "español",
+        "action": "translate",
+        "basemodel": "es-en",
+        "domain": "news",
+        "srclang": "en",
+        "destlang": "es",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "en",
+        "destlanghidden": "es",
+        "basemodelhidden": "es-en",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 1021,
+        "y": 362,
+        "wires": [
+            [
+                "57bc6507.6519e4"
+            ]
+        ]
+    },
+    {
+        "id": "18114876.5fd08",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es coreano",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ko",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "ko",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 488,
+        "y": 803,
+        "wires": [
+            [
+                "e9c27b41.3ab05"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2c97cb3c.1db434",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es chino",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ch",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "ch",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 480,
+        "y": 866,
+        "wires": [
+            [
+                "8fece0f8.e8544"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ea2ca38c.ac6e28",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es ingles",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "en",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "en",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 474,
+        "y": 330,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "300026d5.71946a",
+        "type": "switch",
+        "z": "4248e3f4.dabacc",
+        "name": "es español",
+        "property": "srcLang",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "es",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "es",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 482,
+        "y": 923,
+        "wires": [
+            [
+                "1926ac03.7e652c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1926ac03.7e652c",
+        "type": "watson-translator",
+        "z": "4248e3f4.dabacc",
+        "name": "español",
+        "action": "translate",
+        "basemodel": "en-nl",
+        "domain": "news",
+        "srclang": "en",
+        "destlang": "nl",
+        "password": "OiEFivc4Lg3L",
+        "custom": "",
+        "domainhidden": "news",
+        "srclanghidden": "en",
+        "destlanghidden": "nl",
+        "basemodelhidden": "en-nl",
+        "customhidden": "",
+        "filetype": "forcedglossary",
+        "trainid": "",
+        "lgparams2": true,
+        "neural": true,
+        "default-endpoint": false,
+        "service-endpoint": "https://gateway.watsonplatform.net/language-translator/api",
+        "x": 718,
+        "y": 917,
+        "wires": [
+            [
+                "8122c624.b4ce6"
+            ]
+        ]
+    }
+]
